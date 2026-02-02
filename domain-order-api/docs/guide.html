@@ -1,1 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GetYour Partner API — Guide</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; margin: 0; }
+    header { padding: 24px; background: #111; color: #fff; }
+    main { max-width: 980px; margin: 0 auto; padding: 24px; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    pre { background: #f6f8fa; padding: 16px; border-radius: 10px; overflow: auto; }
+    .card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; margin: 16px 0; }
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .pill { display:inline-block; padding:4px 10px; border-radius:999px; background:#eef2ff; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 style="margin:0;">GetYour Partner API — Domain Order</h1>
+    <p style="margin:8px 0 0;">Base URL: <span class="pill">https://getyour.com.bd</span></p>
+    <p style="margin:8px 0 0;">
+      <a href="./index.html" style="color:#fff;">Open Swagger UI</a>
+    </p>
+  </header>
 
+  <main>
+    <div class="card">
+      <h2>Authentication</h2>
+      <p>HTTP Basic Auth. Use your <b>User ID</b> as username and <b>password</b> as password.</p>
+    </div>
+
+    <div class="card">
+      <h2>Endpoint</h2>
+      <p><b>POST</b> <code>/api/v1/domain/orders</code></p>
+      <p>Content-Type: <code>multipart/form-data</code> • Rate limit: <code>60/min</code></p>
+    </div>
+
+    <div class="card">
+      <h2>Request fields</h2>
+      <ul>
+        <li><code>domain</code> (string) — required</li>
+        <li><code>nameServers[0]</code>, <code>nameServers[1]</code> (string) — required</li>
+        <li><code>nameServers[2]</code> (string) — optional</li>
+        <li><code>fullName</code> (string) — required</li>
+        <li><code>nid</code> (10/13/17 digits) — required</li>
+        <li><code>nid_document</code> (jpg/jpeg/png/pdf) — required</li>
+        <li><code>registration_document</code> (file) — required for some TLDs</li>
+        <li><code>email</code> (email) — required</li>
+        <li><code>contactAddress</code> (string) — required</li>
+        <li><code>contactNumber</code> (+880 + 10 digits) — required</li>
+        <li><code>years</code> (1–10) — optional</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>cURL example</h2>
+      <pre><code>curl -X POST "https://getyour.com.bd/api/v1/domain/orders" \
+  -u "USER_ID:PASSWORD" \
+  -H "Accept: application/json" \
+  -F "domain=example.com" \
+  -F "nameServers[0]=ns1.example.net" \
+  -F "nameServers[1]=ns2.example.net" \
+  -F "fullName=Minhazul Islam" \
+  -F "nid=1234567890" \
+  -F "nid_document=@/path/to/nid.pdf" \
+  -F "registration_document=@/path/to/reg.pdf" \
+  -F "email=minhajulshaoun@gmail.com" \
+  -F "contactAddress=Dhaka, Bangladesh" \
+  -F "contactNumber=+8801712345678" \
+  -F "years=1"</code></pre>
+    </div>
+
+    <div class="card">
+      <h2>Success response (201)</h2>
+      <pre><code>{
+  "message": "Domain order created. Invoice generated and pending payment.",
+  "order": {
+    "id": 123,
+    "domain": "example.com",
+    "status": "pending",
+    "registration_status": "pending",
+    "term_years": 1
+  },
+  "invoice": {
+    "id": 456,
+    "status": "unpaid",
+    "payment_method": "api",
+    "total": 1234.56
+  },
+  "pricing": {
+    "subtotal": "...",
+    "vat": "...",
+    "platform_fee": "...",
+    "total": "..."
+  }
+}</code></pre>
+    </div>
+
+    <div class="card">
+      <h2>Errors</h2>
+      <ul>
+        <li><b>401</b> Unauthorized (Basic Auth failed)</li>
+        <li><b>422</b> Validation error (Laravel standard JSON)</li>
+        <li><b>429</b> Too Many Requests (throttled)</li>
+        <li><b>500</b> Server error</li>
+      </ul>
+    </div>
+  </main>
+</body>
+</html>
