@@ -6,7 +6,7 @@ info:
     API for placing domain orders (creates order + generates invoice).
     Protected by HTTP Basic Auth and throttled.
 servers:
-  - url: https://YOUR-DOMAIN.COM
+  - url: https://getyour.com.bd
     description: Production
 
 tags:
