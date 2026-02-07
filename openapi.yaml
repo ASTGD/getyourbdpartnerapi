@@ -6,7 +6,7 @@ info:
     API for placing domain orders (creates order + generates invoice).
     Protected by HTTP Basic Auth and throttled.
 servers:
-  - url: https://getyour.com.bd
+  - url: https://sandbox.getyour.com.bd
     description: Production
 
 tags:
