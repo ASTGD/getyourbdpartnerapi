@@ -1,0 +1,264 @@
+openapi: 3.0.3
+info:
+  title: Domain Orders API
+  version: 1.0.0
+  description: >
+    API for placing domain orders (creates order + generates invoice).
+    Protected by HTTP Basic Auth and throttled.
+servers:
+  - url: https://getyour.com.bd
+    description: Production
+
+tags:
+  - name: Domain Orders
+    description: Create domain orders and invoices
+
+paths:
+  /api/v1/domain/orders:
+    post:
+      tags: [Domain Orders]
+      summary: Place a domain order
+      description: Creates a domain order, generates an invoice, and returns pricing breakdown.
+      security:
+        - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - domain
+                - nameServers
+                - fullName
+                - nid
+                - nid_document
+                - email
+                - contactAddress
+                - contactNumber
+              properties:
+                domain:
+                  type: string
+                  example: example.com
+
+                nameServers:
+                  type: array
+                  description: Array of 2–3 name servers (index 0 and 1 required)
+                  minItems: 2
+                  maxItems: 3
+                  items:
+                    type: string
+                    example: ns1.example.net
+                  example:
+                    - ns1.example.net
+                    - ns2.example.net
+
+                fullName:
+                  type: string
+                  example: Minhazul Islam
+
+                nid:
+                  type: string
+                  description: "NID: 10/13/17 digits"
+                  pattern: "^(\\d{10}|\\d{13}|\\d{17})$"
+                  example: "1234567890"
+
+                nid_document:
+                  type: string
+                  format: binary
+                  description: "jpg/jpeg/png/pdf"
+
+                registration_document:
+                  type: string
+                  format: binary
+                  description: "Required for some TLDs"
+
+                email:
+                  type: string
+                  format: email
+                  example: minhajulshaoun@gmail.com
+
+                contactAddress:
+                  type: string
+                  example: Dhaka, Bangladesh
+
+                contactNumber:
+                  type: string
+                  description: "+880 followed by 10 digits"
+                  pattern: "^\\+880\\d{10}$"
+                  example: "+8801712345678"
+
+                years:
+                  type: integer
+                  description: Registration term in years
+                  minimum: 1
+                  maximum: 10
+                  default: 1
+                  example: 1
+
+      responses:
+        "201":
+          description: Created (order + invoice generated)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DomainOrderCreatedResponse"
+              example:
+                message: "Domain order created. Invoice generated and pending payment."
+                order:
+                  id: 123
+                  domain: "example.com"
+                  status: "pending"
+                  registration_status: "pending"
+                  term_years: 1
+                invoice:
+                  id: 456
+                  status: "unpaid"
+                  payment_method: "api"
+                  total: 1234.56
+                pricing:
+                  subtotal: "1000.00"
+                  vat: "150.00"
+                  platform_fee: "84.56"
+                  total: "1234.56"
+
+        "422":
+          description: Validation error (Laravel standard format)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LaravelValidationError"
+              example:
+                message: "The given data was invalid."
+                errors:
+                  domain:
+                    - "The domain field is required."
+                  nameServers.0:
+                    - "The nameServers.0 field is required."
+                  contactNumber:
+                    - "The contactNumber format is invalid."
+
+        "401":
+          description: Unauthorized (Basic Auth failed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+              example:
+                message: "Unauthorized."
+
+        "429":
+          description: Too Many Requests (throttled)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+              example:
+                message: "Too Many Attempts."
+
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+              example:
+                message: "Server Error."
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: >
+        Use HTTP Basic Auth (username/password). Do not share credentials publicly.
+
+  schemas:
+    DomainOrderCreatedResponse:
+      type: object
+      required: [message, order, invoice, pricing]
+      properties:
+        message:
+          type: string
+        order:
+          $ref: "#/components/schemas/Order"
+        invoice:
+          $ref: "#/components/schemas/Invoice"
+        pricing:
+          $ref: "#/components/schemas/Pricing"
+
+    Order:
+      type: object
+      required: [id, domain, status, registration_status, term_years]
+      properties:
+        id:
+          type: integer
+          example: 123
+        domain:
+          type: string
+          example: example.com
+        status:
+          type: string
+          example: pending
+        registration_status:
+          type: string
+          example: pending
+        term_years:
+          type: integer
+          example: 1
+
+    Invoice:
+      type: object
+      required: [id, status, payment_method, total]
+      properties:
+        id:
+          type: integer
+          example: 456
+        status:
+          type: string
+          example: unpaid
+        payment_method:
+          type: string
+          example: api
+        total:
+          type: number
+          format: float
+          example: 1234.56
+
+    Pricing:
+      type: object
+      required: [subtotal, vat, platform_fee, total]
+      properties:
+        subtotal:
+          type: string
+          example: "1000.00"
+        vat:
+          type: string
+          example: "150.00"
+        platform_fee:
+          type: string
+          example: "84.56"
+        total:
+          type: string
+          example: "1234.56"
+
+    LaravelValidationError:
+      type: object
+      required: [message, errors]
+      properties:
+        message:
+          type: string
+          example: The given data was invalid.
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+
+    ErrorMessage:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
