@@ -25,6 +25,10 @@ paths:
         required: true
         content:
           multipart/form-data:
+           encoding:
+              nameServers:
+                style: form
+                explode: true
             schema:
               type: object
               required:
