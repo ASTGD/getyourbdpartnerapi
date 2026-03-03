@@ -25,15 +25,12 @@ paths:
         required: true
         content:
           multipart/form-data:
-            encoding:
-              nameServers:
-                style: form
-                explode: true
             schema:
               type: object
               required:
                 - domain
-                - nameServers
+                - nameServers[0]
+                - nameServers[1]
                 - fullName
                 - nid
                 - nid_document
@@ -45,17 +42,20 @@ paths:
                   type: string
                   example: example.com
 
-                nameServers:
-                  type: array
-                  description: Array of 2–3 name servers (index 0 and 1 required)
-                  minItems: 2
-                  maxItems: 3
-                  items:
-                    type: string
-                    example: ns1.example.net
-                  example:
-                    - ns1.example.net
-                    - ns2.example.net
+                nameServers[0]:
+                  type: string
+                  description: Primary name server (required)
+                  example: ns1.example.net
+
+                nameServers[1]:
+                  type: string
+                  description: Secondary name server (required)
+                  example: ns2.example.net
+
+                nameServers[2]:
+                  type: string
+                  description: Optional third name server
+                  example: ns3.example.net
 
                 fullName:
                   type: string
