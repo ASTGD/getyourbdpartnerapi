@@ -184,6 +184,12 @@ curl -X POST https://domainapi.astgd.com/api/v1/domain/availability \
 
 Create a new domain order and generate an invoice for payment.
 
+## Base URL
+
+```text
+https://getyour.com.bd
+```
+
 ## Endpoint
 
 ```http
@@ -250,6 +256,12 @@ POST /api/v1/domain/orders
 # Update Name Servers API
 
 Update the name servers of an existing domain order.
+
+## Base URL
+
+```text
+https://getyour.com.bd
+```
 
 ## Endpoint
 
