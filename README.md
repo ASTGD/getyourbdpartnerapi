@@ -3,6 +3,12 @@
 **Base URL**
 
 ```text
+There are 2 separate base URL.
+
+For Domain Availability API
+https://domainapi.astgd.com
+
+For Domain Order, Name Server Change & Renewal
 https://getyour.com.bd
 ```
 
