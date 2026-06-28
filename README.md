@@ -61,6 +61,12 @@ Supported API keys:
 
 Check whether a domain is available for registration.
 
+## BaseURL
+
+```text
+https://domainapi.astgd.com
+```
+
 ## Endpoint
 
 ```http
