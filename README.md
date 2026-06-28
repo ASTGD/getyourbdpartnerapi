@@ -16,7 +16,8 @@ https://getyour.com.bd
 
 # Authentication
 
-The API uses two authentication methods depending on the endpoint.
+The API uses two authentication methods depending on the endpoint. We will send you a single API key when you are approved as a partner. For partnership request please apply here
+https://getyour.com.bd/partner
 
 ## HTTP Basic Authentication
 
@@ -25,7 +26,8 @@ The following endpoints require **HTTP Basic Authentication**:
 * Domain Order API
 * Update Name Servers API
 
-Use your assigned:
+Use your username and password for GetYourBD account. If you do not have an account please open here
+https://getyour.com.bd
 
 * **User ID** as the username
 * **Password** as the password
@@ -40,7 +42,7 @@ curl -u "USER_ID:PASSWORD"
 
 ## API Key Authentication
 
-The **Domain Availability API** uses an API key.
+The **Domain Availability API** uses an API key. We will provide this API key when you are approved as a partner.
 
 Send your API key in the `x-api-key` request header.
 
