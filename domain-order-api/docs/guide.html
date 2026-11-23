@@ -43,10 +43,10 @@
         <li><code>domain</code> (string) — required</li>
         <li><code>nameServers[0]</code>, <code>nameServers[1]</code> (string) — required</li>
         <li><code>nameServers[2]</code> (string) — optional</li>
-        <li><code>fullName</code> (string) — required</li>
+        <li><code>nidFullName</code> (string) — required (as printed on NID)</li>
         <li><code>nid</code> (10/13/17 digits) — required</li>
         <li><code>nid_document</code> (jpg/jpeg/png/pdf) — required</li>
-        <li><code>registration_document</code> (file) — required for some TLDs</li>
+        <li><code>registration_document</code> (file) — required for some TLDs (mandatory for .bd)</li>
         <li><code>email</code> (email) — required</li>
         <li><code>contactAddress</code> (string) — required</li>
         <li><code>contactNumber</code> (+880 + 10 digits) — required</li>
@@ -62,7 +62,7 @@
   -F "domain=example.com" \
   -F "nameServers[0]=ns1.example.net" \
   -F "nameServers[1]=ns2.example.net" \
-  -F "fullName=Minhazul Islam" \
+  -F "nidFullName=Minhazul Islam" \
   -F "nid=1234567890" \
   -F "nid_document=@/path/to/nid.pdf" \
   -F "registration_document=@/path/to/reg.pdf" \
