@@ -34,7 +34,7 @@ paths:
               required:
                 - domain
                 - nameServers
-                - fullName
+                - nidFullName
                 - nid
                 - nid_document
                 - email
@@ -57,8 +57,9 @@ paths:
                     - ns1.example.net
                     - ns2.example.net
 
-                fullName:
+                nidFullName:
                   type: string
+                  description: "Registrant full name as printed on NID"
                   example: Minhazul Islam
 
                 nid:
@@ -75,7 +76,7 @@ paths:
                 registration_document:
                   type: string
                   format: binary
-                  description: "Required for some TLDs"
+                  description: "Required for some TLDs (mandatory for .bd domains)"
 
                 email:
                   type: string

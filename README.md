@@ -208,7 +208,7 @@ POST /api/v1/domain/orders
 | ---------------- | ------ | ---------------------------------- |
 | `domain`         | string | Domain name to register            |
 | `nameServers[]`  | array  | 2–3 name servers                   |
-| `fullName`       | string | Registrant full name               |
+| `nidFullName`    | string | Registrant full name (as on NID)   |
 | `nid`            | string | National ID (10, 13, or 17 digits) |
 | `nid_document`   | file   | JPG, JPEG, PNG, or PDF             |
 | `email`          | string | Valid email address                |
@@ -217,10 +217,10 @@ POST /api/v1/domain/orders
 
 ### Optional Fields
 
-| Field                   | Type    | Description                    |
-| ----------------------- | ------- | ------------------------------ |
-| `years`                 | integer | Registration term (1–10 years) |
-| `registration_document` | file    | Required for some TLDs         |
+| Field                   | Type    | Description                                        |
+| ----------------------- | ------- | -------------------------------------------------- |
+| `years`                 | integer | Registration term (1–10 years)                     |
+| `registration_document` | file    | Required for some TLDs (mandatory for .bd domains) |
 
 ### Success Response
 
